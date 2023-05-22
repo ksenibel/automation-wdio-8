@@ -9,25 +9,29 @@ describe('Homework', async () => {
         const idNameSelector = $('#name');
         console.log(await idNameSelector.getHTML());
 
-        const idEmailSelector = $('#email');
-        console.log(await idEmailSelector.getHTML());
+        const emailField = $('#email');
+        console.log('Email filed is displayed' + await emailField.getHTML());
+        console.log('Email field is enabled: ' + await emailField.isEnabled());
 
-        const idPasswordSelector = $('#password');
-        console.log(await idPasswordSelector.getHTML());
+        const passwordField = $('#password');
+        console.log('Password field is displayed' + await passwordField.getHTML());
+        console.log('Password field is enabled: ' + await passwordField.isEnabled());
 
-        const idPasswordControlSelector = $('#password-confirm');
-        console.log(await idPasswordControlSelector.getHTML());
+        const passwordFieldControl = $('#password-confirm');
+        console.log('Password field control is displayed' + await passwordFieldControl.getHTML());
+        console.log('Password field control is enabled: ' + await passwordFieldControl.isEnabled());
 
-        const buttonSelector = $('.btn-primary');
-        console.log(await buttonSelector.getHTML());
+        const loginButtonSelector = $('.btn-primary');
+        console.log('Login button text' + await loginButtonSelector.getHTML());
 
         await idNameSelector.setValue('Name Surname');
-        await idEmailSelector.setValue('da-app.admin@czechitas.cz');
-        await idPasswordSelector.setValue('Czechitas123');
-        await idPasswordControlSelector.setValue('Czechitas123');
-        await buttonSelector.click();
+        await emailField.setValue('da-app.admin@czechitas.cz');
+        await passwordField.setValue('Czechitas123');
+        await passwordFieldControl.setValue('Czechitas123');
+        await loginButtonSelector.click();
 
         await browser.pause(5000);
     });
 
 });
+
