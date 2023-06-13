@@ -1,3 +1,7 @@
+import {ReportGenerator, ReportAggregator, HtmlReporter} from 'wdio-html-nice-reporter';
+
+const reportsDirectory = './reports/html-reports/';
+
 export const config = {
     runner: 'local',
     specs: [
@@ -23,7 +27,7 @@ export const config = {
     maxInstances: 10,
     capabilities: [{
         maxInstances: 5,
-        browserName: 'chrome',
+        browserName: 'firefox',
         acceptInsecureCerts: true,
         'goog:chromeOptions': {
             args: [
@@ -43,7 +47,7 @@ export const config = {
             ]
         }
     }],
-    logLevel: 'silent',
+    logLevel: 'info',
     bail: 0,
     baseUrl: 'https://team8-2022brno.herokuapp.com',
     waitforTimeout: 10000,
@@ -54,9 +58,39 @@ export const config = {
         'geckodriver'
     ],
     framework: 'mocha',
-    reporters: ['spec'],
+    reporters: [
+        'spec',
+        ["html-nice", {
+            outputDir: reportsDirectory,
+            filename: 'report.html',
+            reportTitle: 'Czechitas Automatizované Testování',
+            linkScreenshots: true,
+            showInBrowser: true,
+            collapseTests: false,
+            useOnAfterCommandForScreenshot: true
+        }]
+    ],
     mochaOpts: {
         ui: 'bdd',
         timeout: 60000
+    },
+
+    onPrepare: (config, capabilities) => {
+        let reportAggregator = new ReportAggregator({
+            outputDir: reportsDirectory,
+            filename: 'master-report.html',
+            reportTitle: 'Czechitas Test Automation',
+            browserName : capabilities.browserName,
+            collapseTests: true,
+        });
+        reportAggregator.clean() ;
+        
+    
+    },
+    onComplete: function (exitCode, config, capabilities, results) {
+        (async () => {
+            await reportAggregator.createReport();
+        })();
     }
+
 }

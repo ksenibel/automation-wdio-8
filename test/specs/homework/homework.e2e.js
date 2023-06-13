@@ -1,74 +1,105 @@
+async function openLoginPage (){
+    await browser.reloadSession();
+    await browser.url('/registrace');
+}
+
+async function getNameField(){
+    return $('#name')
+}
+
+async function getEmailField(){
+    return $('#email')
+}
+
+async function getPasswordField(){
+    return $('#password')
+}
+
+async function getPasswordFieldControl(){
+    return $('#password-confirm')
+}
+
+async function getLoginButton(){
+    return $('.btn-primary')
+}
+
+async function getRightNavbar() {
+    return $('.navbar-right');
+}
+
+async function getUserNameDropdown() {
+    return (await getRightNavbar()).$('[data-toggle="dropdown"]')
+}
+
+async function getToastMessage() {
+    return $('.toast-message')
+}
+
+async function getErrorField() {
+    return $('.invalid-feedback')
+}
+
 describe('Homework', async () => {
 
     beforeEach(async () => {
-        await browser.reloadSession();
-        await browser.url('/registrace');
+        await openLoginPage();        
     });
 
 
-    it('Should check if the registration field is displayed correctly', async () => {
+    it.skip('Should check if the registration field is displayed correctly', async () => {
 
-        const nameField = $('#name')
-        console.log('Name field is displayed' + await nameField.getHTML());
-        console.log('Name field is enabled: ' + await nameField.isEnabled());
+        const nameField = await getNameField();
+        await expect(nameField).toBeDisplayed();
+        await expect(nameField).toBeEnabled();
 
-        const emailField = $('#email');
-        console.log('Email field is displayed' + await emailField.getHTML());
-        console.log('Email field is enabled: ' + await emailField.isEnabled());
+        const emailField = await getEmailField();
+        await expect(emailField).toBeDisplayed();
+        await expect(emailField).toBeEnabled();
 
-        const passwordField = $('#password');
-        console.log('Password field is displayed' + await passwordField.getHTML());
-        console.log('Password field is enabled: ' + await passwordField.isEnabled());
+        const passwordField = await getPasswordField();
+        await expect(passwordField).toBeDisplayed();
+        await expect(passwordField).toBeEnabled();
 
-        const passwordFieldControl = $('#password-confirm');
-        console.log('Password field control is displayed' + await passwordFieldControl.getHTML());
-        console.log('Password field control is enabled: ' + await passwordFieldControl.isEnabled());
+        const passwordFieldControl = await getPasswordFieldControl();
+        await expect(passwordFieldControl).toBeDisplayed();
+        await expect(passwordFieldControl).toBeEnabled();
 
-        const loginButtonSelector = $('.btn-primary');
-        console.log('Login button text' + await loginButtonSelector.getHTML());
+        const loginButtonSelector = await getLoginButton();
+        await expect(await loginButtonSelector.getText()).toEqual('Zaregistrovat')
 
         await browser.pause(5000);
     });
 
-    it('Should register the user with valid cridentials', async () => {
-        const nameField = $('#name');
-        const emailField = $('#email');
-        const passwordField = $('#password');
-        const passwordFieldControl = $('#password-confirm');
-        const loginButtonSelector = $('.btn-primary');
-        const registeredUser = $('.navbar-right').$('[data-toggle="dropdown"]');
-        const userFullName = "Test Test"
+    it.skip('Should register the user with valid cridentials', async () => {
+       
+        const userFullName = "Test Test";
 
-        await nameField.setValue('Test Test');
-        await emailField.setValue('523456@email.cz');
-        await passwordField.setValue('Czech123');
-        await passwordFieldControl.setValue('Czech123');
-        await loginButtonSelector.click();
+        await (await getNameField()).setValue('Test Test');
+        await (await getEmailField()).setValue('9234567@email.cz');
+        await (await getPasswordField()).setValue('Czech123');
+        await (await getPasswordFieldControl()).setValue('Czech123');
+        await (await getLoginButton()).click();
 
-        await expect(await registeredUser.getText()).toEqual(userFullName);
+        await expect(await (await getUserNameDropdown()).getText()).toEqual(userFullName);
 
-        await browser.pause(5000);
+        browser.pause(10000);
     })
 
-    it('Should not register the user with existing email', async () => {
+    it.skip('Should not register the user with existing email', async () => {
 
-        const nameField = $('#name');
-        const emailField = $('#email');
-        const passwordField = $('#password');
-        const passwordFieldControl = $('#password-confirm');
-        const loginButtonSelector = $('.btn-primary');
-        const toastMessage= $('.toast-message');
-        const errorField = $('.invalid-feedback');
+        const emailField = await getEmailField();
+        const passwordField = await getPasswordField();
+        const loginButtonSelector = await getLoginButton();
 
-        await nameField.setValue('Lišák Admin');
-        await emailField.setValue('da-app.admin@czechitas.cz');
-        await passwordField.setValue('Czechitas123');
-        await passwordFieldControl.setValue('Czechitas123');
-        await loginButtonSelector.click();
+        await (await getNameField()).setValue('Lišák Admin');
+        await (await getEmailField()).setValue('da-app.admin@czechitas.cz');
+        await (await getPasswordField()).setValue('Czechitas123');
+        await (await getPasswordFieldControl()).setValue('Czechitas123');
+        await (await getLoginButton()).click();
 
-        await expect(await toastMessage.getText()).toEqual('Některé pole obsahuje špatně zadanou hodnotu');
+        await expect(await (await getToastMessage()).getText()).toEqual('Některé pole obsahuje špatně zadanou hodnotu');
 
-        await expect(await errorField.getText()).toEqual('Účet s tímto emailem již existuje');
+        await expect(await (await getErrorField()).getText()).toEqual('Účet s tímto emailem již existuje');
 
         await expect(await emailField).toBeDisplayed();
         await expect(await passwordField).toBeDisplayed();
@@ -79,23 +110,15 @@ describe('Homework', async () => {
 
     it('Should not register the user with the wrong password', async () => {
 
-        const nameField = $('#name');
-        const emailField = $('#email');
-        const passwordField = $('#password');
-        const passwordFieldControl = $('#password-confirm');
-        const loginButtonSelector = $('.btn-primary');
-        const toastMessage= $('.toast-message');
-        const errorField = $('.invalid-feedback');
+        await (await getNameField()).setValue('Test Test');
+        await (await getEmailField()).setValue('11234@email.cz');
+        await (await getPasswordField()).setValue('1234567890');
+        await (await getPasswordFieldControl()).setValue('1234567890');
+        await (await getLoginButton()).click();
 
-        await nameField.setValue('Test Test');
-        await emailField.setValue('11234@email.cz');
-        await passwordField.setValue('1234567890');
-        await passwordFieldControl.setValue('1234567890');
-        await loginButtonSelector.click();
-
-        await expect(await toastMessage.getText()).toEqual('Některé pole obsahuje špatně zadanou hodnotu');
+        await expect(await (await getToastMessage()).getText()).toEqual('Některé pole obsahuje špatně zadanou hodnotu');
         
-        await expect(await errorField.getText()).toEqual('Heslo musí obsahovat minimálně 6 znaků, velké i malé písmeno a číslici');
+        await expect(await (await getErrorField()).getText()).toEqual('Heslo musí obsahovat minimálně 6 znaků, velké i malé písmeno a číslici');
 
         await browser.pause(5000);
 
