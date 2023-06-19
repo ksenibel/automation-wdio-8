@@ -27,7 +27,7 @@ export const config = {
     maxInstances: 10,
     capabilities: [{
         maxInstances: 5,
-        browserName: 'firefox',
+        browserName: 'edge',
         acceptInsecureCerts: true,
         'goog:chromeOptions': {
             args: [
@@ -84,13 +84,18 @@ export const config = {
             collapseTests: true,
         });
         reportAggregator.clean() ;
-        
+        global.reportAggregator = reportAggregator;
     
     },
     onComplete: function (exitCode, config, capabilities, results) {
         (async () => {
             await reportAggregator.createReport();
         })();
+    },
+    afterTest: async (test, context, { error, result, duration, passed, retries }) => {
+        const screenshotName = (`./.tmp/${test.parent}__${test.title}.png`).replace(/ /g, '_');
+        await browser.saveScreenshot(screenshotName);
     }
+
 
 }
