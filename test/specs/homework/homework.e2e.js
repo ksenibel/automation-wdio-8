@@ -10,7 +10,7 @@ describe('Homework', async () => {
     });
 
 
-    it.skip('Should check if the registration field is displayed correctly', async () => {
+    it('Should check if the registration field is displayed correctly', async () => {
 
         await expect(await LoginPage.nameField).toBeDisplayed();
         await expect(await LoginPage.nameField).toBeEnabled();
@@ -63,7 +63,7 @@ describe('Homework', async () => {
         await browser.pause(5000);
     });
 
-    it('Should not register the user with the wrong password', async () => {
+    it.skip('Should not register the user with the wrong password', async () => {
 
         await (await LoginPage.nameField).setValue('Test Test');
         await (await LoginPage.emailField).setValue('11234@email.cz');

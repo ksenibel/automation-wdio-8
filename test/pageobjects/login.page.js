@@ -1,6 +1,9 @@
-class LoginPage {
+import AppPage from './app.page.js';
+
+class LoginPage extends AppPage{
 
     constructor() {
+        super();
         this.url = '/registrace';
     }
 
@@ -9,8 +12,6 @@ class LoginPage {
     get passwordField() {return $('#password');}
     get passwordFieldControl() {return $('#password-confirm');}
     get loginButtonSelector() {return $('.btn-primary');}
-    get navbarRight() {return $('.navbar-right');}
-    get userNameDropdown() {return this.navbarRight.$('[data-toggle="dropdown"]');}
     get toastMessage() {return $('.toast-message');}
     get errorField() {return $('.invalid-feedback');}
     
@@ -23,10 +24,6 @@ class LoginPage {
         await this.emailField.setValue(username);
         await this.passwordField.setValue(password);
         await this.loginButton.click();
-    }
-
-    async getCurrentUser() {
-        return await this.userNameDropdown.getText();
     }
 
     async getErrorField() {
