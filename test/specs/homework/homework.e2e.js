@@ -29,7 +29,7 @@ describe('Homework', async () => {
         await browser.pause(5000);
     });
 
-    it.skip('Should register the user with valid cridentials', async () => {
+    it('Should register the user with valid cridentials', async () => {
 
         const userFullName = "Test Test ";
 
@@ -44,7 +44,7 @@ describe('Homework', async () => {
         browser.pause(10000);
     });
 
-    it.skip('Should not register the user with existing email', async () => {
+    it('Should not register the user with existing email', async () => {
 
         await (await LoginPage.nameField).setValue('Lišák Admin');
         await (await LoginPage.emailField).setValue('da-app.admin@czechitas.cz');
@@ -63,7 +63,7 @@ describe('Homework', async () => {
         await browser.pause(5000);
     });
 
-    it.skip('Should not register the user with the wrong password', async () => {
+    it('Should not register the user with the wrong password', async () => {
 
         await (await LoginPage.nameField).setValue('Test Test');
         await (await LoginPage.emailField).setValue('11234@email.cz');
